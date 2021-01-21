@@ -20,11 +20,13 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class RelevantMethods {
-    private static final ConcurrentMap<Class<?>, RelevantMethods> METHODS_CACHE = new ConcurrentHashMap<Class<?>, RelevantMethods>();
+
+    public static RelevantMethods relevantMethodsOf(Class<?> type) {
+        return buildRelevantMethods(type);
+    }
+
     private static final ServiceMethodFactory SERVICE_METHOD_FACTORY = new DefaultServiceMethodFactory();
 
     final List<ServiceMethod> decorators;
@@ -43,16 +45,6 @@ public class RelevantMethods {
             result.add(SERVICE_METHOD_FACTORY.toServiceMethod(method));
         }
         return result;
-    }
-
-    public static RelevantMethods getMethods(Class<?> type) {
-        RelevantMethods relevantMethods = METHODS_CACHE.get(type);
-        if (relevantMethods == null) {
-            relevantMethods = buildRelevantMethods(type);
-            METHODS_CACHE.putIfAbsent(type, relevantMethods);
-        }
-
-        return relevantMethods;
     }
 
     private static RelevantMethods buildRelevantMethods(Class<?> type) {

@@ -43,6 +43,8 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.gradle.internal.service.RelevantMethods.relevantMethodsOf;
+
 /**
  * A hierarchical {@link ServiceRegistry} implementation.
  *
@@ -159,7 +161,7 @@ public class DefaultServiceRegistry implements ServiceRegistry, Closeable, Conta
 
     private void findProviderMethods(Object target) {
         Class<?> type = target.getClass();
-        RelevantMethods methods = RelevantMethods.getMethods(type);
+        RelevantMethods methods = relevantMethodsOf(type);
         for (ServiceMethod method : methods.decorators) {
             if (parentServices == null) {
                 throw new ServiceLookupException(String.format("Cannot use decorator method %s.%s() when no parent registry is provided.", type.getSimpleName(), method.getName()));
