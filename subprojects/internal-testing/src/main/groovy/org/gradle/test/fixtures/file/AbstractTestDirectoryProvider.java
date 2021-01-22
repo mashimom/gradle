@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertFalse;
+
 
 /**
  * A JUnit rule which provides a unique temporary folder for the test.
@@ -74,6 +76,7 @@ abstract class AbstractTestDirectoryProvider implements TestRule, TestDirectoryP
                 @SuppressWarnings("UnusedDeclaration")
                 void doCall() throws IOException {
                     dir.forceDeleteDir();
+                    assertFalse(dir.exists());
                 }
             });
         }
